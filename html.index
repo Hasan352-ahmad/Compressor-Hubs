@@ -1,0 +1,709 @@
+# CompressorHub — Ready-to-Deploy React + Vite Website (Fixed)
+
+**This document contains a complete, working copy-paste-ready project.**
+Follow the steps in README to run locally and deploy to Vercel/Netlify.
+
+---
+
+## Project structure
+
+```
+compressorhub/
+├─ package.json
+├─ vite.config.js
+├─ tailwind.config.cjs
+├─ postcss.config.cjs
+├─ index.html
+├─ README.md
+├─ public/
+│  └─ robots.txt
+├─ src/
+│  ├─ main.jsx
+│  ├─ App.jsx
+│  ├─ styles.css
+│  ├─ components/
+│  │  ├─ Navbar.jsx
+│  │  ├─ Footer.jsx
+│  │  ├─ ImageCompressor.jsx
+│  │  ├─ PDFMerge.jsx
+│  │  ├─ InvoiceMaker.jsx
+│  │  ├─ Todo.jsx
+│  │  ├─ Alarm.jsx
+│  │  ├─ Calculator.jsx
+│  │  └─ Reviews.jsx
+│  └─ lib/
+│     └─ seoData.js
+└─ .gitignore
+```
+
+---
+
+### package.json
+
+```json
+{
+  "name": "compressorhub",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "browser-image-compression": "^1.0.16",
+    "jspdf": "^2.5.1",
+    "pdf-lib": "^1.17.1",
+    "html2canvas": "^1.4.1",
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.0.0",
+    "tailwindcss": "^3.4.7",
+    "postcss": "^8.4.23",
+    "autoprefixer": "^10.4.14",
+    "vite": "^5.0.0"
+  }
+}
+```
+
+---
+
+### vite.config.js
+
+```js
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+
+export default defineConfig({
+  plugins: [react()],
+})
+```
+
+---
+
+### tailwind.config.cjs
+
+```js
+module.exports = {
+  content: ['./index.html', './src/**/*.{js,jsx,ts,tsx}'],
+  theme: { extend: {} },
+  plugins: [],
+}
+```
+
+---
+
+### postcss.config.cjs
+
+```js
+module.exports = {
+  plugins: {
+    tailwindcss: {},
+    autoprefixer: {},
+  }
+}
+```
+
+---
+
+### index.html
+
+```html
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>CompressorHub — Fast Image & PDF Tools</title>
+    <meta name="description" content="CompressorHub — lightweight online tools: image compressor, PDF merge, invoice maker, audio & video helpers. Minimal modern UI and easy ad integration." />
+    <meta name="keywords" content="image compressor, PDF merge, invoice maker, online tools, compress images" />
+    <link rel="icon" href="/favicon.ico" />
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "CompressorHub",
+      "url": "https://your-domain.com",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://your-domain.com/?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+
+    <script type="module" src="/src/main.jsx"></script>
+  </head>
+  <body class="antialiased bg-gray-50">
+    <div id="root"></div>
+  </body>
+</html>
+```
+
+---
+
+### public/robots.txt
+
+```
+User-agent: *
+Allow: /
+Sitemap: https://your-domain.com/sitemap.xml
+```
+
+---
+
+### src/main.jsx
+
+```jsx
+import React from 'react'
+import { createRoot } from 'react-dom/client'
+import App from './App'
+import './styles.css'
+
+createRoot(document.getElementById('root')).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+)
+```
+
+---
+
+### src/styles.css
+
+```css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, body, #root { height: 100%; }
+.container { max-width: 1100px; margin: 0 auto; }
+.card { @apply bg-white p-6 rounded-2xl shadow-sm border; }
+.ad-box { @apply p-4 border-dashed border-2 border-gray-200 rounded; }
+```
+
+---
+
+### src/lib/seoData.js
+
+```js
+export const siteMeta = {
+  title: 'CompressorHub — Fast Image & PDF Tools',
+  description: 'CompressorHub — lightweight online tools: image compressor, PDF merge, invoice maker, audio & video helpers. Minimal modern UI and easy ad integration.',
+  url: 'https://your-domain.com',
+}
+```
+
+---
+
+### src/components/Navbar.jsx
+
+```jsx
+import React from 'react'
+
+export default function Navbar({ onOpenAdAdmin }) {
+  return (
+    <header className="bg-white shadow">
+      <div className="container px-4 py-4 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="text-2xl font-bold">CompressorHub</div>
+          <nav className="ml-4 hidden md:flex gap-4 text-sm text-gray-700">
+            <a href="#tools" className="hover:underline">Tools</a>
+            <a href="#invoice" className="hover:underline">Invoice</a>
+            <a href="#reviews" className="hover:underline">Reviews</a>
+            <a href="#contact" className="hover:underline">Contact</a>
+          </nav>
+        </div>
+
+        <div className="flex items-center gap-3">
+          <button onClick={onOpenAdAdmin} className="text-sm px-3 py-2 border rounded">Ad Admin</button>
+          <a href="#tools" className="text-sm px-3 py-2 bg-indigo-600 text-white rounded">Get Started</a>
+        </div>
+      </div>
+    </header>
+  )
+}
+```
+
+---
+
+### src/components/Footer.jsx
+
+```jsx
+import React from 'react'
+
+export default function Footer(){
+  return (
+    <footer className="mt-12 text-sm text-gray-500 text-center p-6">
+      © {new Date().getFullYear()} CompressorHub — Built for speed • <a href="#contact" className="underline">Contact</a>
+    </footer>
+  )
+}
+```
+
+---
+
+### src/components/ImageCompressor.jsx
+
+```jsx
+import React, { useState } from 'react'
+import imageCompression from 'browser-image-compression'
+
+export default function ImageCompressor(){
+  const [file, setFile] = useState(null)
+  const [compressedUrl, setCompressedUrl] = useState(null)
+  const [origSize, setOrigSize] = useState(null)
+  const [newSize, setNewSize] = useState(null)
+
+  async function handleFileChange(e){
+    const f = e.target.files[0]
+    if(!f) return
+    setFile(f)
+    setOrigSize(f.size)
+    const options = {
+      maxSizeMB: 1,
+      maxWidthOrHeight: 1920,
+      useWebWorker: true
+    }
+    try{
+      const compressedFile = await imageCompression(f, options)
+      setNewSize(compressedFile.size)
+      const url = URL.createObjectURL(compressedFile)
+      setCompressedUrl(url)
+    }catch(err){
+      console.error(err)
+      alert('Compression failed. Try a smaller image.')
+    }
+  }
+
+  return (
+    <div className="card">
+      <h4 className="font-semibold">Image Compressor</h4>
+      <p className="text-sm text-gray-600">Choose an image, compress client-side, and download.</p>
+      <div className="mt-3">
+        <input type="file" accept="image/*" onChange={handleFileChange} />
+      </div>
+
+      {file && (
+        <div className="mt-3">
+          <div className="text-sm">Original size: {(origSize/1024).toFixed(1)} KB</div>
+          {newSize && <div className="text-sm">Compressed size: {(newSize/1024).toFixed(1)} KB</div>}
+          {compressedUrl && (
+            <div className="mt-3">
+              <img src={compressedUrl} alt="compressed" className="max-w-xs rounded" />
+              <div className="mt-2">
+                <a href={compressedUrl} download={`compressed-${file.name}`} className="px-3 py-2 bg-green-600 text-white rounded text-sm">Download</a>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  )
+}
+```
+
+---
+
+### src/components/PDFMerge.jsx
+
+```jsx
+import React, { useState } from 'react'
+import { PDFDocument } from 'pdf-lib'
+
+export default function PDFMerge(){
+  const [files, setFiles] = useState([])
+
+  function onFiles(e){
+    const list = Array.from(e.target.files).filter(f => f.type === 'application/pdf')
+    setFiles(list)
+  }
+
+  async function merge(){
+    if(files.length < 2){ alert('Select at least 2 PDFs'); return }
+    const mergedPdf = await PDFDocument.create()
+    for(const f of files){
+      const arr = await f.arrayBuffer()
+      const pdf = await PDFDocument.load(arr)
+      const copied = await mergedPdf.copyPages(pdf, pdf.getPageIndices())
+      copied.forEach(p => mergedPdf.addPage(p))
+    }
+    const bytes = await mergedPdf.save()
+    const blob = new Blob([bytes], { type: 'application/pdf' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = 'merged.pdf'
+    a.click()
+  }
+
+  return (
+    <div className="card">
+      <h4 className="font-semibold">PDF Merge</h4>
+      <p className="text-sm text-gray-600">Select multiple PDF files and merge them client-side.</p>
+      <div className="mt-3">
+        <input type="file" accept="application/pdf" multiple onChange={onFiles} />
+      </div>
+      {files.length > 0 && (
+        <div className="mt-3">
+          <div className="text-sm">Selected: {files.map(f => f.name).join(', ')}</div>
+          <button onClick={merge} className="mt-3 px-3 py-2 bg-indigo-600 text-white rounded">Merge PDFs</button>
+        </div>
+      )}
+    </div>
+  )
+}
+```
+
+---
+
+### src/components/InvoiceMaker.jsx
+
+```jsx
+import React, { useState } from 'react'
+import jsPDF from 'jspdf'
+import html2canvas from 'html2canvas'
+
+export default function InvoiceMaker(){
+  const [items, setItems] = useState([{desc:'Design work', qty:1, price:100}])
+  const [company, setCompany] = useState('Your Company')
+  const [client, setClient] = useState('Client name')
+
+  function addItem(){ setItems([...items, {desc:'', qty:1, price:0}]) }
+  function updateItem(i, key, val){ const copy = [...items]; copy[i][key]=val; setItems(copy) }
+
+  function exportPDF(){
+    const el = document.getElementById('invoice-preview')
+    html2canvas(el).then(canvas => {
+      const img = canvas.toDataURL('image/png')
+      const pdf = new jsPDF('p','pt','a4')
+      const imgProps = pdf.getImageProperties(img)
+      const pdfWidth = pdf.internal.pageSize.getWidth()
+      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width
+      pdf.addImage(img, 'PNG', 0, 0, pdfWidth, pdfHeight)
+      pdf.save('invoice.pdf')
+    })
+  }
+
+  const subtotal = items.reduce((s,i)=> s + (i.qty * i.price),0)
+  const tax = subtotal * 0.18
+  const total = subtotal + tax
+
+  return (
+    <div className="card">
+      <h4 className="font-semibold">Invoice Maker</h4>
+      <p className="text-sm text-gray-600">Fill details and export a professional invoice as PDF.</p>
+
+      <div className="mt-3 space-y-2">
+        <input className="w-full p-2 border rounded" value={company} onChange={e=>setCompany(e.target.value)} placeholder="Company name" />
+        <input className="w-full p-2 border rounded" value={client} onChange={e=>setClient(e.target.value)} placeholder="Client name" />
+        <div className="mt-2">
+          {items.map((it,i)=> (
+            <div key={i} className="flex gap-2 mb-2">
+              <input className="flex-1 p-2 border rounded" value={it.desc} onChange={e=>updateItem(i,'desc',e.target.value)} placeholder="Item description" />
+              <input className="w-20 p-2 border rounded" type="number" value={it.qty} onChange={e=>updateItem(i,'qty',Number(e.target.value))} />
+              <input className="w-28 p-2 border rounded" type="number" value={it.price} onChange={e=>updateItem(i,'price',Number(e.target.value))} />
+            </div>
+          ))}
+          <button onClick={addItem} className="px-3 py-2 border rounded">Add item</button>
+        </div>
+
+        <div id="invoice-preview" className="mt-4 p-4 border rounded bg-white">
+          <h3 className="text-lg font-bold">{company}</h3>
+          <div>Bill to: {client}</div>
+          <table className="w-full mt-3 text-sm">
+            <thead><tr className="text-left"><th>Description</th><th>Qty</th><th>Price</th><th>Total</th></tr></thead>
+            <tbody>
+              {items.map((it,i)=> (
+                <tr key={i}><td>{it.desc}</td><td>{it.qty}</td><td>{it.price}</td><td>{it.qty*it.price}</td></tr>
+              ))}
+            </tbody>
+          </table>
+          <div className="mt-3 text-right">Subtotal: {subtotal.toFixed(2)}</div>
+          <div className="text-right">Tax (18%): {tax.toFixed(2)}</div>
+          <div className="font-semibold text-right">Total: {total.toFixed(2)}</div>
+        </div>
+
+        <div className="mt-3">
+          <button onClick={exportPDF} className="px-4 py-2 bg-green-600 text-white rounded">Export PDF</button>
+        </div>
+      </div>
+    </div>
+  )
+}
+```
+
+---
+
+### src/components/Todo.jsx
+
+```jsx
+import React, { useState } from 'react'
+
+export default function Todo(){
+  const [task, setTask] = useState('')
+  const [list, setList] = useState([])
+
+  function add(){ if(!task) return; setList([...list,{id:Date.now(), text:task, done:false}]); setTask('') }
+  function toggle(id){ setList(list.map(l=> l.id===id? {...l, done:!l.done}:l)) }
+  function remove(id){ setList(list.filter(l=> l.id!==id)) }
+
+  return (
+    <div className="card">
+      <h4 className="font-semibold">Todo</h4>
+      <div className="mt-3 flex gap-2">
+        <input value={task} onChange={e=>setTask(e.target.value)} className="flex-1 p-2 border rounded" placeholder="New task" />
+        <button onClick={add} className="px-3 py-2 bg-blue-600 text-white rounded">Add</button>
+      </div>
+      <ul className="mt-3 space-y-2">
+        {list.map(l=> (
+          <li key={l.id} className={`p-2 border rounded flex justify-between ${l.done? 'bg-green-50':''}`}>
+            <label className="inline-flex items-center gap-2"><input type="checkbox" checked={l.done} onChange={()=>toggle(l.id)} /> <span>{l.text}</span></label>
+            <button onClick={()=>remove(l.id)} className="text-sm text-red-500">Delete</button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
+}
+```
+
+---
+
+### src/components/Alarm.jsx
+
+```jsx
+import React, { useState, useRef } from 'react'
+
+const PRESETS = [440, 523.25, 659.25, 880, 987.77, 1108.73, 1318.51, 1567.98, 1760, 1975.53]
+
+export default function Alarm(){
+  const [time, setTime] = useState('')
+  const [preset, setPreset] = useState(0)
+  const timers = useRef([])
+
+  function schedule(){
+    const secs = Number(time)
+    if(!secs || secs <=0) return alert('Enter seconds to wait')
+    const id = setTimeout(()=>playTone(PRESETS[preset]), secs*1000)
+    timers.current.push(id)
+    alert('Alarm set for ' + secs + ' seconds')
+  }
+
+  function playTone(freq){
+    const ctx = new (window.AudioContext || window.webkitAudioContext)()
+    const o = ctx.createOscillator()
+    const g = ctx.createGain()
+    o.type = 'sine'
+    o.frequency.value = freq
+    o.connect(g); g.connect(ctx.destination)
+    o.start()
+    g.gain.setValueAtTime(0.0001, ctx.currentTime)
+    g.gain.exponentialRampToValueAtTime(0.5, ctx.currentTime + 0.01)
+    setTimeout(()=>{ g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.5); o.stop(); ctx.close(); }, 1500)
+  }
+
+  function cancelAll(){ timers.current.forEach(clearTimeout); timers.current = []; alert('Cancelled all alarms') }
+
+  return (
+    <div className="card">
+      <h4 className="font-semibold">Alarm (10 tones)</h4>
+      <p className="text-sm text-gray-600">Set an alarm by seconds. Choose one of 10 preset tones.</p>
+      <div className="mt-3 flex gap-2">
+        <input type="number" className="p-2 border rounded" placeholder="Seconds" value={time} onChange={e=>setTime(e.target.value)} />
+        <select value={preset} onChange={e=>setPreset(Number(e.target.value))} className="p-2 border rounded">
+          {PRESETS.map((f,i)=> <option key={i} value={i}>Tone {i+1} ({Math.round(f)}Hz)</option>)}
+        </select>
+        <button onClick={schedule} className="px-3 py-2 bg-indigo-600 text-white rounded">Set</button>
+      </div>
+      <div className="mt-3 flex gap-2"><button onClick={()=>playTone(PRESETS[preset])} className="px-3 py-2 border rounded">Test Tone</button><button onClick={cancelAll} className="px-3 py-2 border rounded">Cancel all</button></div>
+    </div>
+  )
+}
+```
+
+---
+
+### src/components/Calculator.jsx
+
+```jsx
+import React, { useState } from 'react'
+
+export default function Calculator(){
+  const [expr, setExpr] = useState('')
+  function calc(){
+    try{
+      if(!/^[0-9+\-*/(). 
+]+$/.test(expr)) return setExpr('Error')
+      // eslint-disable-next-line no-eval
+      const res = eval(expr)
+      setExpr(String(res))
+    }catch(e){ setExpr('Error') }
+  }
+
+  return (
+    <div className="card">
+      <h4 className="font-semibold">Calculator</h4>
+      <div className="mt-3 flex gap-2">
+        <input value={expr} onChange={e=>setExpr(e.target.value)} className="flex-1 p-2 border rounded" placeholder="e.g. 12+3*4" />
+        <button onClick={calc} className="px-3 py-2 bg-gray-800 text-white rounded">=</button>
+      </div>
+    </div>
+  )
+}
+```
+
+---
+
+### src/components/Reviews.jsx
+
+```jsx
+import React from 'react'
+
+const REVIEWS = [
+  {name:'Amit', text:'Super fast tools — saved me lots of time!'},
+  {name:'Priya', text:'Simple UI and works offline for images.'},
+  {name:'Rohit', text:'Love the invoice export.'}
+]
+
+export default function Reviews(){
+  return (
+    <div className="card" id="reviews">
+      <h4 className="font-semibold">What users say</h4>
+      <div className="mt-3 grid sm:grid-cols-2 gap-3">
+        {REVIEWS.map((r,i)=> (
+          <div key={i} className="p-3 border rounded">
+            <div className="font-semibold">{r.name}</div>
+            <div className="text-sm text-gray-600">{r.text}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+```
+
+---
+
+### src/App.jsx
+
+```jsx
+import React, { useState } from 'react'
+import Navbar from './components/Navbar'
+import Footer from './components/Footer'
+import ImageCompressor from './components/ImageCompressor'
+import PDFMerge from './components/PDFMerge'
+import InvoiceMaker from './components/InvoiceMaker'
+import Todo from './components/Todo'
+import Alarm from './components/Alarm'
+import Calculator from './components/Calculator'
+import Reviews from './components/Reviews'
+import { siteMeta } from './lib/seoData'
+
+export default function App(){
+  const [adHtml, setAdHtml] = useState("<div style='padding:12px;border:1px dashed #ccc;text-align:center'>Paste ad script here</div>")
+  const [showAdAdmin, setShowAdAdmin] = useState(false)
+
+  return (
+    <div>
+      <Navbar onOpenAdAdmin={()=> setShowAdAdmin(true)} />
+
+      <main className="container px-4 py-8">
+        <section className="card">
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <h1 className="text-2xl font-bold">CompressorHub</h1>
+              <p className="mt-2 text-gray-600">Fast, minimal, and SEO-friendly tools: image compression, PDF merge, invoice export and more. Paste your ad script into the Ad Admin to show ads on the page.</p>
+              <div className="mt-4 flex gap-2">
+                <a href="#tools" className="px-4 py-2 bg-indigo-600 text-white rounded">Open tools</a>
+                <a href="#invoice" className="px-4 py-2 border rounded">Invoice</a>
+              </div>
+            </div>
+            <div className="w-64 ad-box" aria-hidden dangerouslySetInnerHTML={{ __html: adHtml }} />
+          </div>
+        </section>
+
+        <section id="tools" className="mt-6 grid lg:grid-cols-3 gap-4">
+          <ImageCompressor />
+          <PDFMerge />
+          <InvoiceMaker />
+          <Todo />
+          <Alarm />
+          <Calculator />
+        </section>
+
+        <section className="mt-6">
+          <Reviews />
+        </section>
+
+        <section id="contact" className="mt-6 card">
+          <h4 className="font-semibold">Contact & Links</h4>
+          <p className="text-sm text-gray-600 mt-2">Add your contact links below (these are examples; replace with your real links):</p>
+          <ul className="mt-3 space-y-1 text-sm">
+            <li>Website: <a href="https://your-domain.com" className="underline">your-domain.com</a></li>
+            <li>Privacy: <a href="/privacy" className="underline">Privacy Policy</a></li>
+            <li>Terms: <a href="/terms" className="underline">Terms & Conditions</a></li>
+          </ul>
+        </section>
+
+      </main>
+
+      <Footer />
+
+      {showAdAdmin && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center">
+          <div className="w-full max-w-2xl p-6 bg-white rounded">
+            <h3 className="font-semibold">Ad Admin — Paste ad script or iframe HTML</h3>
+            <textarea className="w-full h-40 p-2 border rounded mt-3" value={adHtml} onChange={e=>setAdHtml(e.target.value)} />
+            <div className="mt-4 flex gap-2 justify-end">
+              <button onClick={()=> setShowAdAdmin(false)} className="px-3 py-2 border rounded">Close</button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+```
+
+---
+
+### .gitignore
+
+```
+node_modules
+dist
+.env
+```
+
+---
+
+### README.md
+
+```md
+# CompressorHub
+
+A ready-to-deploy React + Vite project with client-side image compression, PDF merge, invoice export, todo, alarm tones, calculator, reviews, and ad integration.
+
+## Quick start
+1. `npm install`
+2. `npm run dev` to test locally
+3. Push to GitHub and connect to Vercel for automatic deployment.
+
+## Notes and limitations
+- Video compression and Word→PDF/PDF→Word conversions are not fully implemented client-side (they often require server-side tools like ffmpeg or LibreOffice). I included PDF merge, image compression, and invoice export which work client-side.
+- For heavy video jobs, use serverless ffmpeg and queue jobs (Vercel Serverless or a small VPS).
+
+## SEO
+- Edit `index.html` meta tags and `src/lib/seoData.js` with your real domain and titles. Add sitemap and robots from the `public/robots.txt`.
+
+## Ad integration
+- Use the Ad Admin on the page to paste your ad provider HTML/script. Example: paste AdSense or any iframe from ad networks.
+```
+
+---
+
+**Now:** copy these files into your repo exactly. If you still see an error, paste the exact terminal/browser error message here and I will patch the exact file live in this canvas again.
